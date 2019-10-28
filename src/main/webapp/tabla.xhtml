@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+            xmlns:h="http://java.sun.com/jsf/html"
+            xmlns:f="http://java.sun.com/jsf/core"
+            xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Automoviles</title>
+    </h:head>
+    <h:body id="main">
+        <style type="text/css">
+            .ui-row-editor .ui-row-editor-pencil {
+            margin-left:8px;
+        }
+        </style>
+        <h:form id="form">
+           <p:growl id="msgs" showDetail="true"/>
+             <p:dataTable id="dtCarros" value="#{ctabla.lista}" var="p"  editable="true"
+                 rows="10"
+                 widgetVar="carsTable"
+                 emptyMessage="No se encontraron autos con esos criterios" filteredValue="#{ctabla.filteredCars}">
+                 
+                <p:ajax event="rowEdit" listener="#{ctabla.onRowEdit}" update=":form:msgs" />
+                <p:ajax event="rowEditCancel" listener="#{ctabla.onRowCancel}" update=":form:msgs" />
+                <p:column>
+                    <h:selectBooleanCheckbox value="#{p.select}"/>
+                </p:column>
+                  <p:column headerText="Id">
+                     <h:outputText value="#{p.id}" />
+                </p:column>
+                 <p:column headerText="Nombre" >
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{p.nombre}" /></f:facet>
+                            <f:facet name="input">
+                                <p:inputText value="#{ctabla.nombre}" style="width:100%" label="Nombre" >
+                                    <h:outputLabel value="#{p.nombre}"/>
+                                </p:inputText>
+                            </f:facet>
+                       </p:cellEditor>
+                  </p:column>
+                      <p:column headerText="Marca"  >
+                                 <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{p.marca}" /></f:facet>
+                                <f:facet name="input">
+                                    <h:selectOneMenu value="#{p.marca}" style="width:100%">
+                                        <f:selectItems value="#{ctabla.marcas}" var="man" itemLabel="#{man}" itemValue="#{man}" />
+                                  </h:selectOneMenu>
+                </f:facet>
+            </p:cellEditor>
+                </p:column>
+                 <p:column headerText="Modelo" >
+                          <p:cellEditor>
+                              <f:facet name="output"><h:outputText value="#{p.modelo}" /></f:facet>
+                              <f:facet name="input">
+                                  <p:inputText value="#{ctabla.modelo}" style="width:100%" label="Modelo">
+                                       <h:outputLabel value="#{p.modelo}"/>
+                                  </p:inputText>
+                              </f:facet>
+                         </p:cellEditor>
+                </p:column>
+                 <p:column style="width:35px">
+                        <p:rowEditor />
+                  </p:column>
+            </p:dataTable>
+           <br/>
+           <p:commandButton value="Eliminar" actionListener="#{ctabla.eliminar()}" update="form" icon="ui-icon-trash">
+               <p:confirm message="Seguro que desea eliminar? " header="Aviso" icon="ui-icon-alert"/>
+           </p:commandButton>
+           <p:confirmDialog global="true">
+               <p:commandButton value="Si" type="button" icon="ui-icon-check" styleClass="ui-confirmdialog-yes"/>
+               <p:commandButton value="No" type="button" icon="ui-icon-close" styleClass="ui-confirmdialog-no"/>
+           </p:confirmDialog>
+           
+        </h:form>
+    </h:body>
+</html>
